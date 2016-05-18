@@ -192,6 +192,44 @@ class Model_Image extends OnePiece5
 		//	init
 		$x = 0;
 		$y = 0;
+		$debug = array();
+
+		//	Original
+		$w = imagesx($image);
+		$h = imagesy($image);
+		$r = $h / $w;
+
+		$debug['original']['w'] = $w;
+		$debug['original']['h'] = $h;
+		$debug['original']['r'] = $r;
+
+		//	New
+		$ratio = $height / $width;
+
+		//	Not center justification.
+		if( $position !== 'center' ){
+			return array($x, $y);
+		}
+
+		if( $r >= $ratio ){
+			$i = 1;
+			$p = $r - $ratio;
+			$y = $h * $p / 2;
+		}else{
+			$i = 2;
+			$p = $ratio - $r;
+			$x = $w * $p / 2;
+		}
+
+		$debug['new']['i'] = $i;
+		$debug['new']['ratio']  = $ratio;
+		$debug['new']['width']  = $width;
+		$debug['new']['height'] = $height;
+
+		$debug['result']['x'] = $x;
+		$debug['result']['y'] = $y;
+	//	$this->d($debug);
+
 		return array($x, $y);
 	}
 
