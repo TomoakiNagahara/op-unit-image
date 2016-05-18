@@ -110,9 +110,12 @@ class Model_Image extends OnePiece5
 		return $image;
 	}
 
-	function GetImageResize($image_orig, $width, $height, $position=null)
+	function GetImageResize($image_orig, $width, $height, $position='center')
 	{
+		//	New image resourse.
 		$image = imagecreatetruecolor($width, $height);
+
+		//	Alpha channel.
 		if( $alpha = imagecolortransparent($image_orig) ){
 			imagefill($image, 0, 0, $alpha);
 			imagecolortransparent($image, $alpha);
@@ -121,9 +124,75 @@ class Model_Image extends OnePiece5
 			imagesavealpha($image, true);
 		}
 
-		ImageCopyResampled($image, $image_orig, 0, 0, 0, 0, $width, $height, imagesx($image_orig), imagesy($image_orig));
+		//	Calc original size. (Relative)
+		list($w, $h) = $this->GetSize($image_orig, $width, $height);
+
+		//	Calc original coordinate. (Relative)
+		list($x, $y) = $this->GetPosition($image_orig, $width, $height, $position);
+
+		//	Resize.
+		ImageCopyResampled($image, $image_orig, 0, 0, $x, $y, $width, $height, $w, $h);
 
 		return $image;
+	}
+
+	function GetSize($image, $width, $height)
+	{
+		$debug = array();
+
+		//	Original
+		$w = imagesx($image);
+		$h = imagesy($image);
+		$r = imagesy($image) / imagesx($image);
+
+		$debug['original']['r'] = $r;
+		$debug['original']['w'] = $w;
+		$debug['original']['h'] = $h;
+
+		//	New
+		$ratio = $height / $width;
+
+		if( $r >= $ratio ){
+			if( $width > $height ){
+				$i = 1;
+				$r = $w / $width;
+				$h = $height * $r;
+			}else{
+				$i = 2;
+				$r = $h / $height;
+				$w = $width * $r;
+			}
+		}else{
+			if( $width >= $height ){
+				$i = 3;
+				$r = $h / $height;
+				$w = $width * $r;
+			}else{
+				$i = 4;
+				$r = $w / $width;
+				$h = $height * $r;
+			}
+		}
+
+		$debug['new']['ratio'] = $ratio;
+		$debug['new']['r'] = $r;
+		$debug['new']['w'] = $w;
+		$debug['new']['h'] = $h;
+
+		$debug['result']['w'] = $w;
+		$debug['result']['h'] = $h;
+
+	//	$this->d($debug);
+
+		return array($w, $h);
+	}
+
+	function GetPosition($image, $width, $height, $position='center')
+	{
+		//	init
+		$x = 0;
+		$y = 0;
+		return array($x, $y);
 	}
 
 	function SaveImage($image, $path)
@@ -141,7 +210,7 @@ class Model_Image extends OnePiece5
 
 		switch( $extension = $m[1] ){
 			case 'jpg':
-				$io = imagejpeg($image, $full_path, 90);
+				$io = imagejpeg($image, $full_path, 99);
 				break;
 			case 'png':
 				$io = imagepng($image, $full_path, 1);
