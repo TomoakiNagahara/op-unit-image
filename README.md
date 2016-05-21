@@ -7,7 +7,7 @@ op-unit-image
 /* @var $this App */
 $this->mark();
 
-/* @var $image Model_Image */
+/* @var $$model_image Model_Image */
 $model_image = $this->Unit('Image');
 $model_image->Test();
 $model_image->FormDisplay();
@@ -15,12 +15,14 @@ $model_image->FormDisplay();
 $this->mark( $model_image->FormSecure() );
 $this->mark( $model_image->FormStatus() );
 
-if( $file = $model_image->FormFile() ){
-	$image_orig = $model_image->GetImage($file);
+$model_image = $this->Unit('Image');
+if( $file_path  = $model_image->GetFilePath() ){
+	$image_orig = $model_image->GetImage($file_path);
 	$image_copy = $model_image->GetImageResize($image_orig, 128, 128);
 	$model_image->SaveImage($image_copy, 'app:/upload/resize.jpg');
 	imagedestroy($image_orig);
 	imagedestroy($image_copy);
+	unlink($file_path);
 }
 
 ?>
