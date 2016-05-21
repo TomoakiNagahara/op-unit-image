@@ -69,6 +69,16 @@ class Model_Image extends OnePiece5
 		return $this->_form()->GetStatus($form_name);
 	}
 
+	function GetFilePath()
+	{
+		if( $path = $this->FormFile()){
+			$path = $this->ConvertPath("app:/$path");
+		}else{
+			$path = null;
+		}
+		return $path;
+	}
+
 	function GetError()
 	{
 		return $this->_error;
