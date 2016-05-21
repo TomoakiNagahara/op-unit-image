@@ -87,13 +87,11 @@ class Model_Image extends OnePiece5
 	/**
 	 * Get GD image. (resource)
 	 *
-	 * @param  $path
+	 * @param  $full_path
 	 * @return boolean|resource
 	 */
-	function GetImage($path)
+	function GetImage($full_path)
 	{
-		//	Full path
-		$full_path = $this->ConvertPath("app:/$path");
 		if(!file_exists($full_path) ){
 			$this->_error = "Does not exists file. ($full_path)";
 			return false;
