@@ -323,7 +323,7 @@ class Model_Image_Form extends Form5
 	{
 		$form_name = $this->GetFormName();
 		$this->Start($form_name);
-		$this->Input('size');
+		$this->Input('MAX_FILE_SIZE');
 		$this->Input('file');
 		$this->Error('file');
 		$this->Input('submit');
