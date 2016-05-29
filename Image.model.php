@@ -190,8 +190,6 @@ class Model_Image extends OnePiece5
 		$debug['result']['w'] = $w;
 		$debug['result']['h'] = $h;
 
-	//	$this->d($debug);
-
 		return array($w, $h);
 	}
 
@@ -249,8 +247,9 @@ class Model_Image extends OnePiece5
 		}
 
 		$full_path = $this->ConvertPath($path);
-		if(!is_dir( dirname($full_path) ) ){
-			$this->_error = "Does not exists this directory. ($full_path)";
+		$dir_path  = dirname($full_path);
+		if(!is_dir( dirname($dir_path) ) ){
+			$this->_error = "Does not exists this directory. (dir=$dir_path, path=$path)";
 			return false;
 		}
 
