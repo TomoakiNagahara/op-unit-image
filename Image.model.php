@@ -312,6 +312,7 @@ class Model_Image_Form extends Form5
 		$input = new Config();
 		$input->name  = 'submit';
 		$input->type  = 'submit';
+		$input->class = 'submit';
 		$input->value = ' Submit ';
 		$form->input->{$input->name} = $input;
 
