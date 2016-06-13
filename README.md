@@ -32,3 +32,7 @@ if( $file_path  = $model_image->GetFilePath() ){
 <img src="<?= $file ?>"/>
 </html>
 ```
+
+# php.ini
+post_max_size
+upload_max_filesize
