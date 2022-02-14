@@ -239,8 +239,16 @@ class Model_Image extends OnePiece5
 		return array($x, $y);
 	}
 
-	function SaveImage($image, $path)
+	/** Save to file from GDImage.
+	 *
+	 * @param  resource $image
+	 * @param  string   $path
+	 * @param  integer  $quality
+	 * @return boolean  $io
+	 */
+	function SaveImage($image, $path, $quality=85)
 	{
+		/* @var $m array */
 		if(!preg_match('/\.([a-z]+)$/', $path, $m) ){
 			$this->_error = "Does not match extension. ($path)";
 			return false;
@@ -255,7 +263,7 @@ class Model_Image extends OnePiece5
 
 		switch( $extension = $m[1] ){
 			case 'jpg':
-				$io = imagejpeg($image, $full_path, 99);
+				$io = imagejpeg($image, $full_path, $quality);
 				break;
 			case 'png':
 				$io = imagepng($image, $full_path, 1);
